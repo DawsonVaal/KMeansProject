@@ -1,6 +1,6 @@
-from cmath import pi
 import csv
 import math
+import matplotlib.pyplot as plot
 from random import randint
 
 def computeDistance(point1, point2):
@@ -53,6 +53,39 @@ def normalize_data(data, min, max):
         normal_column.append(new_value)
     return normal_column
 
+def visiualize_clusters(clusterCentroids):
+    X = []
+    Y = []
+    for point in clusterCentroids[0][1]:
+        X.append(point[0])
+        Y.append(point[1])
+    plot.xlim([0,105])
+    plot.ylim([0,105])
+    plot.scatter(X,Y, color = "red")
+    X.clear()
+    Y.clear()
+
+    for point in clusterCentroids[1][1]:
+        X.append(point[0])
+        Y.append(point[1])
+    plot.xlim([0, 105])
+    plot.ylim([0, 105])
+    plot.scatter(X, Y, color = "green")
+    X.clear()
+    Y.clear()
+
+    if len(clusterCentroids) == 3:
+        for point in clusterCentroids[2][1]:
+            X.append(point[0])
+            Y.append(point[1])
+        plot.xlim([0, 105])
+        plot.ylim([0, 105])
+        plot.scatter(X, Y, color = "blue")
+        X.clear()
+        Y.clear()
+
+    plot.show()
+
 with open('auto-mpg.csv', mode='r') as read_obj:
     reader = csv.reader(read_obj)
     dataAsRows = list(reader)
@@ -71,7 +104,5 @@ if __name__ == '__main__':
     clusterCentroids = makeInitialCentroids(askUserInput(), dataPoints)
     
     clusterCentroids = clusterizeData(clusterCentroids, dataPoints)
-    print(clusterCentroids)
 
-    
-
+    visiualize_clusters(clusterCentroids)
