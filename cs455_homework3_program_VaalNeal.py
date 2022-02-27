@@ -20,7 +20,7 @@ def askUserInput():
 def makeInitialCentroids(n, points):
     clusters = []
     for x in range(0,n):
-        clusters.append([points[randint(1,100)], []])
+        clusters.append([points[randint(1,99)], []])
     return clusters
 
 def makePoints(data):
@@ -54,6 +54,13 @@ def normalize_data(data, min, max):
         new_value = round((data[i] - min) / (max - min) * 100)
         normal_column.append(new_value)
     return normal_column
+
+def SSE (center, cluster):
+    sum = 0
+    for point in cluster:
+        distance = computeDistance(center, point)
+        sum = sum + distance^2
+    return sum
 
 def visiualize_clusters(clusterCentroids):
     X = []
@@ -114,13 +121,16 @@ if __name__ == '__main__':
     for j in range(0,2):
         columnList = []
         for i in range(1, len(dataAsRows)):
-                columnList.append(int(dataAsRows[i][j]))
+                columnList.append(int(round(float(dataAsRows[i][j]))))
         normalized_data.append(normalize_data(columnList, min(columnList), max(columnList)))
     
     dataPoints = makePoints(normalized_data)
     clusterCentroids = makeInitialCentroids(askUserInput(), dataPoints)
     clusterCentroids = clusterizeData(clusterCentroids, dataPoints)
     visiualize_clusters(clusterCentroids)
+    for i in range(0, len(clusterCentroids)):
+        print("SSE for cluster "+str(i+1)+": "+str(SSE(clusterCentroids[i][0], clusterCentroids[i][1])))
+
 
     loop = 0
     while True:
@@ -131,4 +141,6 @@ if __name__ == '__main__':
         if tempClusters == str(clusterCentroids):
             break
     print("Completed with " + str(loop) + " loop(s)!")
+    for i in range(0, len(clusterCentroids)):
+        print("SSE for cluster "+str(i+1)+": "+str(SSE(clusterCentroids[i][0], clusterCentroids[i][1])))
     visiualize_clusters(clusterCentroids)
