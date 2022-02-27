@@ -98,7 +98,7 @@ def recalibrateCentroids(clusters):
         xAverage = xSum/len(cluster[1])
         yAverage = ySum/len(cluster[1])
         cluster[0] = [xAverage, yAverage]
-
+    return clusters
 
 with open('auto-mpg.csv', mode='r') as read_obj:
     reader = csv.reader(read_obj)
@@ -122,8 +122,13 @@ if __name__ == '__main__':
 
     visiualize_clusters(clusterCentroids)
 
-    x = 0
-    while x < 4:
-        recalibrateCentroids(clusterCentroids)
-        clusterCentroids = clusterizeData(clusterCentroids, dataPoints)
-        visiualize_clusters(clusterCentroids)
+    loop = 0
+    while True:
+        tempClusters = str(clusterCentroids.copy())
+        recalibratedCentroids = recalibrateCentroids(clusterCentroids)
+        clusterCentroids = clusterizeData(recalibratedCentroids, dataPoints)
+        loop += 1
+        if tempClusters == str(clusterCentroids):
+            break
+    print("Completed with " + str(loop) + " loop(s)!")
+    visiualize_clusters(clusterCentroids)
