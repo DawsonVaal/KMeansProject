@@ -64,6 +64,7 @@ def visiualize_clusters(clusterCentroids):
     plot.xlim([0,105])
     plot.ylim([0,105])
     plot.scatter(X,Y, color = "red")
+    plot.scatter(clusterCentroids[0][0][0], clusterCentroids[0][0][1], color = "black", marker = "^")
     X.clear()
     Y.clear()
 
@@ -73,6 +74,7 @@ def visiualize_clusters(clusterCentroids):
     plot.xlim([0, 105])
     plot.ylim([0, 105])
     plot.scatter(X, Y, color = "green")
+    plot.scatter(clusterCentroids[1][0][0], clusterCentroids[1][0][1], color="black", marker="^")
     X.clear()
     Y.clear()
 
@@ -83,6 +85,7 @@ def visiualize_clusters(clusterCentroids):
         plot.xlim([0, 105])
         plot.ylim([0, 105])
         plot.scatter(X, Y, color = "blue")
+        plot.scatter(clusterCentroids[2][0][0], clusterCentroids[2][0][1], color="black", marker="^")
         X.clear()
         Y.clear()
 
@@ -115,11 +118,8 @@ if __name__ == '__main__':
         normalized_data.append(normalize_data(columnList, min(columnList), max(columnList)))
     
     dataPoints = makePoints(normalized_data)
-
     clusterCentroids = makeInitialCentroids(askUserInput(), dataPoints)
-    
     clusterCentroids = clusterizeData(clusterCentroids, dataPoints)
-
     visiualize_clusters(clusterCentroids)
 
     loop = 0
