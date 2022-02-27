@@ -30,6 +30,8 @@ def makePoints(data):
     return pointList
 
 def clusterizeData(clusters, points):
+    for cluster in clusters:
+        cluster[1].clear()
     for x in points:
         if len(clusters) == 2:
             if (computeDistance(x, clusters[0][0]) < computeDistance(x, clusters[1][0])):
@@ -86,6 +88,18 @@ def visiualize_clusters(clusterCentroids):
 
     plot.show()
 
+def recalibrateCentroids(clusters):
+    for cluster in clusters:
+        xSum = 0
+        ySum = 0
+        for point in cluster[1]:
+            xSum += point[0]
+            ySum += point[1]
+        xAverage = xSum/len(cluster[1])
+        yAverage = ySum/len(cluster[1])
+        cluster[0] = [xAverage, yAverage]
+
+
 with open('auto-mpg.csv', mode='r') as read_obj:
     reader = csv.reader(read_obj)
     dataAsRows = list(reader)
@@ -101,8 +115,15 @@ if __name__ == '__main__':
         normalized_data.append(normalize_data(columnList, min(columnList), max(columnList)))
     
     dataPoints = makePoints(normalized_data)
+
     clusterCentroids = makeInitialCentroids(askUserInput(), dataPoints)
     
     clusterCentroids = clusterizeData(clusterCentroids, dataPoints)
 
     visiualize_clusters(clusterCentroids)
+
+    x = 0
+    while x < 4:
+        recalibrateCentroids(clusterCentroids)
+        clusterCentroids = clusterizeData(clusterCentroids, dataPoints)
+        visiualize_clusters(clusterCentroids)
