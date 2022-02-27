@@ -110,6 +110,11 @@ def recalibrateCentroids(clusters):
         cluster[0] = [xAverage, yAverage]
     return clusters
 
+def printSSE(data):
+    for i in range(0, len(data)):
+        print("SSE for cluster "+str(i+1)+": "+str(SSE(data[i][0], data[i][1])))
+    print()
+
 with open('auto-mpg.csv', mode='r') as read_obj:
     reader = csv.reader(read_obj)
     dataAsRows = list(reader)
@@ -127,10 +132,10 @@ if __name__ == '__main__':
     dataPoints = makePoints(normalized_data)
     clusterCentroids = makeInitialCentroids(askUserInput(), dataPoints)
     clusterCentroids = clusterizeData(clusterCentroids, dataPoints)
-    visiualize_clusters(clusterCentroids)
-    for i in range(0, len(clusterCentroids)):
-        print("SSE for cluster "+str(i+1)+": "+str(SSE(clusterCentroids[i][0], clusterCentroids[i][1])))
 
+    print("SSE after 1st loop:")
+    printSSE(clusterCentroids)
+    visiualize_clusters(clusterCentroids)
 
     loop = 0
     while True:
@@ -140,7 +145,7 @@ if __name__ == '__main__':
         loop += 1
         if tempClusters == str(clusterCentroids):
             break
-    print("Completed with " + str(loop) + " loop(s)!")
-    for i in range(0, len(clusterCentroids)):
-        print("SSE for cluster "+str(i+1)+": "+str(SSE(clusterCentroids[i][0], clusterCentroids[i][1])))
+    print("Completed with " + str(loop) + " loop(s)!\n")
+    print("Final SSE:")
+    printSSE(clusterCentroids)
     visiualize_clusters(clusterCentroids)
