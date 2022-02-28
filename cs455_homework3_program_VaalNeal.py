@@ -20,7 +20,7 @@ def askUserInput():
 def makeInitialCentroids(n, points):
     clusters = []
     for x in range(0,n):
-        clusters.append([points[randint(1,8999)], []])
+        clusters.append([points[randint(1,len(points))], []])
     return clusters
 
 def makePoints(data):
