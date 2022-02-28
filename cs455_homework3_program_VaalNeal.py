@@ -20,7 +20,7 @@ def askUserInput():
 def makeInitialCentroids(n, points):
     clusters = []
     for x in range(0,n):
-        clusters.append([points[randint(1,99)], []])
+        clusters.append([points[randint(1,8999)], []])
     return clusters
 
 def makePoints(data):
@@ -65,37 +65,17 @@ def SSE (center, cluster):
 def visiualize_clusters(clusterCentroids):
     X = []
     Y = []
-    for point in clusterCentroids[0][1]:
-        X.append(point[0])
-        Y.append(point[1])
-    plot.xlim([0,105])
-    plot.ylim([0,105])
-    plot.scatter(X,Y, color = "red")
-    plot.scatter(clusterCentroids[0][0][0], clusterCentroids[0][0][1], color = "black", marker = "^")
-    X.clear()
-    Y.clear()
-
-    for point in clusterCentroids[1][1]:
-        X.append(point[0])
-        Y.append(point[1])
-    plot.xlim([0, 105])
-    plot.ylim([0, 105])
-    plot.scatter(X, Y, color = "green")
-    plot.scatter(clusterCentroids[1][0][0], clusterCentroids[1][0][1], color="black", marker="^")
-    X.clear()
-    Y.clear()
-
-    if len(clusterCentroids) == 3:
-        for point in clusterCentroids[2][1]:
+    colorlist = ["red", "green","blue"]
+    for i in range(len(clusterCentroids)):
+        for point in clusterCentroids[i][1]:
             X.append(point[0])
             Y.append(point[1])
-        plot.xlim([0, 105])
-        plot.ylim([0, 105])
-        plot.scatter(X, Y, color = "blue")
-        plot.scatter(clusterCentroids[2][0][0], clusterCentroids[2][0][1], color="black", marker="^")
+        plot.xlim([0,105])
+        plot.ylim([0,105])
+        plot.scatter(X,Y, color = colorlist[i])
+        plot.scatter(clusterCentroids[i][0][0], clusterCentroids[i][0][1], color = "black", marker = "^")
         X.clear()
         Y.clear()
-
     plot.show()
 
 def recalibrateCentroids(clusters):
@@ -115,7 +95,7 @@ def printSSE(data):
         print("SSE for cluster "+str(i+1)+": "+str(SSE(data[i][0], data[i][1])))
     print()
 
-with open('auto-mpg.csv', mode='r') as read_obj:
+with open('9000rows.csv', mode='r') as read_obj:
     reader = csv.reader(read_obj)
     dataAsRows = list(reader)
 
