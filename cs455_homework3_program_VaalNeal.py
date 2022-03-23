@@ -95,7 +95,7 @@ def printSSE(data):
         print("SSE for cluster "+str(i+1)+": "+str(SSE(data[i][0], data[i][1])))
     print()
 
-with open('9000rows.csv', mode='r') as read_obj:
+with open('auto-mpg.csv', mode='r') as read_obj:
     reader = csv.reader(read_obj)
     dataAsRows = list(reader)
 
