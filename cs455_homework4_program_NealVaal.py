@@ -5,15 +5,17 @@ with open('auto-mpg.csv', mode='r') as read_obj:
     reader = csv.reader(read_obj)
     dataAsRows = list(reader)
 
-def askUserInput():
+
+def ask_user_input():
     print("Please enter an ODD number of clusters you want to form from 1-11. ")
-    Index = int(input("Enter number : "))
+    index = int(input("Enter number : "))
     while True:
-        if Index > 1 and Index < 11 and Index % 2 == 1:
+        if 11 > index > 1 == index % 2:
             break
         else:
-            Index = int(input("That was an invalid number, please re-enter an ODD number from 1-11: "))
-    return Index
+            index = int(input("That was an invalid number, please re-enter an ODD number from 1-11: "))
+    return index
+
 
 def normalize_data(data, min, max):
     normal_column = []
@@ -22,21 +24,24 @@ def normalize_data(data, min, max):
         normal_column.append(new_value)
     return normal_column
 
-def makePoints(data):
-    pointList = []
-    for x in range(len(data[0])):
-        pointList.append([data[0][x], data[1][x]])
-    return pointList
 
-def computeDistance(point1, point2):
+def make_points(data):
+    point_list = []
+    for x in range(len(data[0])):
+        point_list.append([data[0][x], data[1][x]])
+    return point_list
+
+
+def compute_distance(point1, point2):
     return int(math.fabs(point1[0] - point2[0]) + math.fabs(point1[1] - point2[1]))
 
-def computeAllDistances(newPoint, trainingData):
+
+def compute_all_distances(new_point, data):
     distances = []
     shortest = []
-    shortestPoints = []
-    for point in trainingData:
-        distances.append(computeDistance(newPoint, point))
+    shortest_points = []
+    for point in data:
+        distances.append(compute_distance(new_point, point))
 
     for i in range(0, k):
         shortest.append(sorted(distances)[i])
@@ -44,65 +49,67 @@ def computeAllDistances(newPoint, trainingData):
     for i in range(0, len(distances)):
         for distance in shortest:
             if distances[i] == distance:
-                shortestPoints.append(trainingData[i])
+                shortest_points.append(data[i])
                 shortest.remove(distance.__index__())
-    return shortestPoints
+    return shortest_points
 
-def predictLabel(shortestPoints):
-    truckVote = 0
-    sedanVote = 0
 
-    for point in shortestPoints:
+def predict_label(shortest_points):
+    truck_vote = 0
+    sedan_vote = 0
+
+    for point in shortest_points:
         if point[2] == 'truck':
-            truckVote += 1
+            truck_vote += 1
         else:
-            sedanVote += 1
-    if truckVote > sedanVote:
+            sedan_vote += 1
+    if truck_vote > sedan_vote:
         return 'truck'
     else:
         return 'sedan'
 
-def calculateAccuracy(testing_data, training_data):
-    sedanTotal = 0
-    truckTotal = 0
-    sedanCorrect = 0
-    truckCorrect = 0
 
-    for testPoint in testing_data:
+def calculate_accuracy(test_data, train_data):
+    sedan_total = 0
+    truck_total = 0
+    sedan_correct = 0
+    truck_correct = 0
+
+    for testPoint in test_data:
         if testPoint[2] == 'truck':
-            truckTotal += 1
-            if testPoint[2] == predictLabel(computeAllDistances(testPoint, training_data)):
-                truckCorrect += 1
+            truck_total += 1
+            if testPoint[2] == predict_label(compute_all_distances(testPoint, train_data)):
+                truck_correct += 1
         else:
-            sedanTotal += 1
-            if testPoint[2] == predictLabel(computeAllDistances(testPoint, training_data)):
-                sedanCorrect += 1
+            sedan_total += 1
+            if testPoint[2] == predict_label(compute_all_distances(testPoint, train_data)):
+                sedan_correct += 1
 
-    truckAccuracy = round(((truckCorrect/truckTotal)*100), 2)
-    sedanAccuracy = round(((sedanCorrect/sedanTotal)*100), 2)
+    truck_accuracy = round(((truck_correct / truck_total) * 100), 2)
+    sedan_accuracy = round(((sedan_correct / sedan_total) * 100), 2)
 
+    print("Truck Correct: " + str(truck_accuracy) + "%")
+    print("Sedan Correct: " + str(sedan_accuracy) + "%")
+    print("Overall Accuracy: " + str(round((truck_accuracy + sedan_accuracy) / 2, 2)) + "%")
 
-    print("Truck Correct: " + str(truckAccuracy) + "%")
-    print("Sedan Correct: " + str(sedanAccuracy) + "%")
-    print("Overall Accuracy: " + str(round((truckAccuracy+sedanAccuracy)/2, 2)) + "%")
 
 if __name__ == '__main__':
     open('auto-mpg.csv')
 
-    k = askUserInput()
+    k = ask_user_input()
 
     normalized_data = []
-    for j in range(0,2):
+    for j in range(0, 2):
         columnList = []
         for i in range(1, len(dataAsRows)):
-                columnList.append(int(round(float(dataAsRows[i][j]))))
+            columnList.append(int(round(float(dataAsRows[i][j]))))
         normalized_data.append(normalize_data(columnList, min(columnList), max(columnList)))
 
-    dataPoints = makePoints(normalized_data)
+    dataPoints = make_points(normalized_data)
     for i in range(1, len(dataAsRows)):
-        dataPoints[i-1].append(dataAsRows[i][2])
+        dataPoints[i - 1].append(dataAsRows[i][2])
 
     training_data = dataPoints[:49]
     testing_data = dataPoints[50:]
 
-    calculateAccuracy(testing_data, training_data)
+    calculate_accuracy(testing_data, training_data)
