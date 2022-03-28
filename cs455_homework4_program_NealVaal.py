@@ -6,7 +6,7 @@ with open('auto-mpg.csv', mode='r') as read_obj:
     dataAsRows = list(reader)
 
 def askUserInput():
-    print("Please enter an ODD number of clusters you want to form from 1-11. ")
+    print("Please enter an ODD number of neighbors you want to form from 1-11. ")
     Index = int(input("Enter number : "))
     while True:
         if Index >= 1 and Index <= 11 and Index % 2 == 1:
